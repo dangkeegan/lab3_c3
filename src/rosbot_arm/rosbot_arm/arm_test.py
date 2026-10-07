@@ -3,7 +3,7 @@
 from ros_robot_controller.ros_robot_controller_sdk import Board
 import rclpy
 import time
-
+from rosbot_msgs.msg import ForwardPositions
 # Utility function to quickly spin a node
 # No need to edit
 def reliable_spin(node, pub, msg, max_time=2.0):
@@ -27,7 +27,7 @@ def reliable_spin(node, pub, msg, max_time=2.0):
 targets = [(1, 500),
            (2, 750), # KEEP JOINT 2 BETWEEN 125 AND 775
            (3, 40),
-           (4, 350),
+           (4, 500),
            (5, 500),
            (10, 350)] # Gripper joint. Keep below 650
 
@@ -59,12 +59,16 @@ def forward():
     rclpy.init()
     node = rclpy.create_node('arm_test')
     # TODO: Update ForwardMsg, 'forward_topic' with your type, topic
-    forward_pub = node.create_publisher(ForwardMsg, 'forward_topic', 10)
-    msg = ForwardMsg()
+    forward_pub = node.create_publisher(ForwardPositions, 'forward_positions_topic', 10)
+    msg = ForwardPositions()
 
     # TODO: Assign targets, duration to your ForwardMsg
+    msg.id = [t[0] for t in targets]
+    msg.position = [t[1] for t in targets]
+
 
     reliable_spin(node, forward_pub, msg)
+    forward_pub.publish(msg)
 
 
 
@@ -94,7 +98,7 @@ def inverse():
 
 
 
-def main(mode='direct'):
+def main(mode='forward'):
     if mode == 'direct':
         direct()
     elif mode=='forward':

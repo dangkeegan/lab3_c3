@@ -13,7 +13,8 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
         (os.path.join('share', package_name, 'launch'), glob('launch/*')),
-        (os.path.join('share', package_name, 'config'), glob('config/*'))
+        (os.path.join('share', package_name, 'config'), glob('config/*')),
+
     ],
     install_requires=['setuptools'],
     zip_safe=True,
@@ -28,7 +29,7 @@ setup(
     },
     entry_points={
         'console_scripts': [
-
+            'teleop_joy = rosbot.teleop_joy:main',
         ],
     },
 )
