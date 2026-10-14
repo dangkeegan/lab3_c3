@@ -3,7 +3,7 @@
 from ros_robot_controller.ros_robot_controller_sdk import Board
 import rclpy
 import time
-from rosbot_msgs.msg import ForwardPositions
+from rosbot_msgs.msg import ForwardPositions, InverseMessage
 # Utility function to quickly spin a node
 # No need to edit
 def reliable_spin(node, pub, msg, max_time=2.0):
@@ -80,25 +80,30 @@ def forward():
 # from rosbot_msgs.msg import InverseMsg
 
 # End position of arm relative to base_link
-xyz = [0.18, 0.02, 0.32]
+xyz = [0.3, 0.0, 0.4]
 roll = 0.0 # Relative roll rotation of gripper
-pitch = -30.0 # Relative pitch rotation of gripper
+pitch = 90.0 # Relative pitch rotation of gripper
 # Don't need yaw! It's a 5-DOF arm and yaw gets set based on xyz
 
 def inverse():
     rclpy.init()
     node = rclpy.create_node('arm_test')
     # TODO: Update InverseMsg, 'inverse_topic' with your type, topic
-    inverse_pub = node.create_publisher(InverseMsg, 'inverse_topic', 10)
-    msg = InverseMsg()
-
+    inverse_pub = node.create_publisher(InverseMessage, 'inverse_kinematics_topic', 10)
+    msg = InverseMessage()
+    
     # TODO: Assign duration, xyz, roll, pitch to your InverseMsg
+    msg.x = xyz[0]
+    msg.y = xyz[1]
+    msg.z = xyz[2]
+    msg.roll = roll
+    msg.pitch = pitch
 
     reliable_spin(node, inverse_pub, msg)
 
 
 
-def main(mode='forward'):
+def main(mode='inverse'):
     if mode == 'direct':
         direct()
     elif mode=='forward':

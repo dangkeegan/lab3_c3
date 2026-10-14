@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from ros_robot_controller.ros_robot_controller_sdk import Board
 from rosbot_msgs.msg import ForwardPositions, GripperControl
-from rosbot_msgs.srv import RosbotArm
+from rosbot_msgs.srv import InverseKinematics
 
 
 class ArmControl(Node):
@@ -23,7 +23,7 @@ class ArmControl(Node):
 
         self.board.bus_servo_set_position(self.duration, list(zip(msg.id, msg.position)) )
         for i in [1, 2, 3, 4, 5, 10]:
-            print(i, ":\t", board.bus_servo_read_position(i))
+            print(i, ":\t", self.board.bus_servo_read_position(i))
 
 
 
