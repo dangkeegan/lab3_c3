@@ -62,10 +62,11 @@ class IKNode(Node):
         le3 = np.hypot(r3, z3)
 
         angles[2] = -2*np.arctan(np.sqrt( ((l1+l2)**2 - le3**2) / (le3**2 - (l1-l2)**2) ))
-        angles[1] =  np.arctan2(z3, r3) - np.arctan2(l2*np.sin(angles[2]), l1 + l2*np.cos(angles[2])) - np.pi/2
+        angles[1] =  np.arctan2(z3, r3) - np.arctan2(l2*np.sin(angles[2]), l1 + l2*np.cos(angles[2])) # - np.pi/2
 
         # angle 4
         angles[3] = pitch_rad - angles[1] - angles[2] - np.pi / 2
+        angles[1] =  angles[1] - np.pi/2 # subtract offset after being used for joint 4 ^
 
         forward_msg = ForwardPositions()
         forward_msg.id = [t for t in arm_ids]
