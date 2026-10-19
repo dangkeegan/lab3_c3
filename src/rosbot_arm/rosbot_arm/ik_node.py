@@ -74,9 +74,15 @@ class IKNode(Node):
     
 
         print("-"*50)
-
+        for i in range(5):
+            if forward_msg.position[i] > max_pulses[i]:
+                self.get_logger().warn('Out of Bounds')
+                return
+            elif forward_msg.position[i] < min_pulses[i]:
+                self.get_logger().warn('Out of Bounds')
+                return
         self.forward_pub.publish(forward_msg)
-        self.get_logger().warn('message')
+        
 
     # TODO: Write inverse kinematics node
     
