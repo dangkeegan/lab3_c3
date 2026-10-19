@@ -71,16 +71,13 @@ class IKNode(Node):
         forward_msg = ForwardPositions()
         forward_msg.id = [t for t in arm_ids]
         angles_deg = [np.degrees(t) for t in angles]
-        forward_msg.position = [int(t) for t in angle_to_pulse(angles_deg)]
+        forward_msg.position = [int(t) for t in angle_to_pulse(angles_deg)] # truncated
     
 
         print("-"*50)
         for i in range(5):
-            if forward_msg.position[i] > max_pulses[i]:
+            if forward_msg.position[i] > max_pulses[i] or forward_msg.position[i] < min_pulses[i]:
                 self.get_logger().error('Out of Bounds') # Someone please change this to print what the index and pulse, IDK how
-                return
-            elif forward_msg.position[i] < min_pulses[i]:
-                self.get_logger().error('Out of Bounds')
                 return
         self.get_logger().info('Success')
         self.forward_pub.publish(forward_msg)
