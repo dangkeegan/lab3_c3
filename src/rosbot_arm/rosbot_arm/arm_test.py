@@ -82,7 +82,7 @@ def forward():
 # End position of arm relative to base_link
 xyz = [0.3, 0.0, 0.4]
 roll = 0.0 # Relative roll rotation of gripper
-pitch = 90.0 # Relative pitch rotation of gripper
+pitch = -90.0 # Relative pitch rotation of gripper
 # Don't need yaw! It's a 5-DOF arm and yaw gets set based on xyz
 
 def inverse():

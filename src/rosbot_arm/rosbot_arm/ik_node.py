@@ -34,7 +34,7 @@ def angle_to_pulse(angles):
     pulses = [np.interp(angles[i], [min_angles[i], max_angles[i]], [min_pulses[i], max_pulses[i]]).astype(int) for i in range(5)]
     return pulses
 
-def pulse_to_angle(pulses):
+def pulse_to_angle(pulses): # Nothing uses this, idk why its here
     # TODO
     angles = [np.interp(pulses[i], [min_pulses[i], max_pulses[i]], [min_angles[i], max_angles[i]]) for i in range(5)]
     return angles
@@ -62,7 +62,7 @@ class IKNode(Node):
         le3 = np.hypot(r3, z3)
 
         angles[2] = -2*np.arctan(np.sqrt( ((l1+l2)**2 - le3**2) / (le3**2 - (l1-l2)**2) ))
-        angles[1] =  np.arctan2(z3, r3) - np.arctan2(l2*np.sin(angles[2]), l1 + l2*np.cos(angles[2])) # - np.pi/2
+        angles[1] =  np.arctan2(z3, r3) - np.arctan2(l2*np.sin(angles[2]), l1 + l2*np.cos(angles[2])) # - np.pi/2 moved offset to after joint 4
 
         # angle 4
         angles[3] = pitch_rad - angles[1] - angles[2] - np.pi / 2
@@ -75,12 +75,15 @@ class IKNode(Node):
     
 
         print("-"*50)
+        # Should error out if pulses out of bounds and prevent sending to arm_control
+        in_bounds = True
         for i in range(5):
             if forward_msg.position[i] > max_pulses[i] or forward_msg.position[i] < min_pulses[i]:
-                self.get_logger().error('Out of Bounds') # Someone please change this to print what the index and pulse, IDK how
-                return
-        self.get_logger().info('Success')
-        self.forward_pub.publish(forward_msg)
+                self.get_logger().error(f"Joint {forward_msg.id[i]} is out of bounds") # Someone please change this to print what the index and pulse, IDK how
+                in_bounds = False
+        if in_bounds:
+            self.get_logger().info('Success')
+            self.forward_pub.publish(forward_msg)
         
 
     # TODO: Write inverse kinematics node
