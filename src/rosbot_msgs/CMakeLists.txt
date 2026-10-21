@@ -18,7 +18,10 @@ rosidl_generate_interfaces(${PROJECT_NAME}
   "msg/ForwardPositions.msg"
   "msg/GripperControl.msg"
   "msg/InverseMessage.msg"
+  "msg/BlockDetection.msg"
   "srv/InverseKinematics.srv"
+  DEPENDENCIES std_msgs
+  DEPENDENCIES geometry_msgs
   # TODO
 )
 

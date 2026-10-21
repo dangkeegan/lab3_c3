@@ -30,7 +30,8 @@ setup(
         'console_scripts': [
             'ik_node = rosbot_arm.ik_node:main',
             'arm_control = rosbot_arm.arm_control:main',
-            'arm_test = rosbot_arm.arm_test:main'
+            'arm_test = rosbot_arm.arm_test:main',
+            'final_sequencer = rosbot_arm.final_sequencer:main' 
         ],
     },
 )
